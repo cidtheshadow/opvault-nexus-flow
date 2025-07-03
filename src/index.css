@@ -43,10 +43,27 @@
 
   body {
     @apply bg-background text-foreground font-sans;
-    background: linear-gradient(135deg, #0a0a0f 0%, #1a0f1a 25%, #0f1a1a 50%, #1a1a0f 75%, #0f0f1a 100%);
+    background: radial-gradient(ellipse at top, #1a0f1a 0%, #0a0a0f 25%, #0f1a1a 50%, #1a1a0f 75%, #0f0f1a 100%);
     background-size: 400% 400%;
-    animation: gradient-shift 20s ease infinite;
+    animation: gradient-shift 15s ease infinite;
     min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(120, 200, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
   }
 
   html {
@@ -55,43 +72,77 @@
 }
 
 @keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0%, 100% { background-position: 0% 50%; }
+  25% { background-position: 100% 50%; }
+  50% { background-position: 50% 100%; }
+  75% { background-position: 50% 0%; }
 }
 
 @keyframes bounce-gentle {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-4px); }
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(2deg); }
 }
 
 @keyframes wiggle {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-3deg); }
-  75% { transform: rotate(3deg); }
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-5deg) scale(1.02); }
+  75% { transform: rotate(5deg) scale(1.02); }
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(168, 85, 247, 0.6); }
+  0%, 100% { 
+    box-shadow: 
+      0 0 20px rgba(168, 85, 247, 0.3),
+      0 0 40px rgba(59, 130, 246, 0.2),
+      0 0 60px rgba(236, 72, 153, 0.1);
+  }
+  50% { 
+    box-shadow: 
+      0 0 40px rgba(168, 85, 247, 0.6),
+      0 0 80px rgba(59, 130, 246, 0.4),
+      0 0 120px rgba(236, 72, 153, 0.2);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-10px) rotate(2deg); }
+  66% { transform: translateY(5px) rotate(-1deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl shadow-2xl;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
+    @apply relative overflow-hidden;
+    background: linear-gradient(135deg, 
+      rgba(255,255,255,0.15) 0%, 
+      rgba(255,255,255,0.05) 50%,
+      rgba(255,255,255,0.1) 100%
+    );
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 24px;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
   
   .playful-card {
     @apply glass-card relative overflow-hidden;
-    border-radius: 24px;
     transform: rotate(-0.5deg);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .playful-card:hover {
-    transform: rotate(0deg) scale(1.02);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    transform: rotate(0deg) scale(1.02) translateY(-4px);
+    box-shadow: 
+      0 25px 50px -12px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(255, 255, 255, 0.1),
+      0 0 40px rgba(168, 85, 247, 0.2);
   }
   
   .playful-card::before {
@@ -101,8 +152,13 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-    transition: left 0.5s;
+    background: linear-gradient(
+      90deg, 
+      transparent, 
+      rgba(255,255,255,0.15), 
+      transparent
+    );
+    transition: left 0.6s ease;
   }
   
   .playful-card:hover::before {
@@ -110,49 +166,102 @@
   }
   
   .gradient-text {
-    @apply bg-gradient-to-r from-pink-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent;
-    animation: gradient-shift 3s ease infinite;
-    background-size: 200% 200%;
+    background: linear-gradient(
+      45deg, 
+      #ff6b6b, 
+      #4ecdc4, 
+      #45b7d1, 
+      #96ceb4, 
+      #ffeaa7,
+      #fd79a8,
+      #6c5ce7,
+      #a29bfe
+    );
+    background-size: 400% 400%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: gradient-shift 4s ease infinite;
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
   }
   
   .hover-lift {
     @apply transition-all duration-300;
+    animation: float 6s ease-in-out infinite;
   }
   
   .hover-lift:hover {
-    animation: bounce-gentle 0.6s ease-in-out;
+    animation: bounce-gentle 0.8s ease-in-out;
+    transform: translateY(-8px) scale(1.02);
   }
   
   .fun-button {
-    @apply relative overflow-hidden rounded-2xl font-medium transition-all duration-300;
-    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7);
-    background-size: 300% 300%;
-    animation: gradient-shift 4s ease infinite;
+    @apply relative overflow-hidden rounded-3xl font-bold transition-all duration-300;
+    background: linear-gradient(
+      45deg, 
+      #ff6b6b, 
+      #4ecdc4, 
+      #45b7d1, 
+      #96ceb4, 
+      #ffeaa7,
+      #fd79a8,
+      #6c5ce7
+    );
+    background-size: 400% 400%;
+    animation: gradient-shift 6s ease infinite;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   }
   
   .fun-button:hover {
-    animation: wiggle 0.5s ease-in-out, pulse-glow 2s ease-in-out infinite;
-    transform: scale(1.05);
+    animation: wiggle 0.6s ease-in-out, pulse-glow 3s ease-in-out infinite;
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   }
   
   .fun-button::after {
     content: '';
     position: absolute;
-    inset: 2px;
-    background: rgba(15, 15, 23, 0.9);
-    border-radius: 14px;
+    inset: 3px;
+    background: rgba(15, 15, 23, 0.85);
+    border-radius: 20px;
     z-index: -1;
+    backdrop-filter: blur(10px);
+  }
+  
+  .fun-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+    background-size: 200% 200%;
+    animation: shimmer 3s ease infinite;
+    border-radius: 24px;
   }
   
   .colorful-badge {
-    @apply px-3 py-1 rounded-full text-xs font-semibold;
+    @apply px-4 py-2 rounded-full text-sm font-bold;
     background: linear-gradient(45deg, #ff9a9e, #fecfef, #fecfef);
     color: #1a1a2e;
+    box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
   }
   
   .stats-card {
-    @apply playful-card p-6;
-    background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.08) 100%);
+    @apply playful-card p-8;
+    background: linear-gradient(135deg, 
+      rgba(255,255,255,0.12) 0%, 
+      rgba(255,255,255,0.06) 50%,
+      rgba(255,255,255,0.10) 100%
+    );
+    border: 2px solid rgba(255,255,255,0.1);
+  }
+  
+  .stats-card:hover {
+    border-color: rgba(168, 85, 247, 0.3);
+    background: linear-gradient(135deg, 
+      rgba(168,85,247,0.15) 0%, 
+      rgba(59,130,246,0.1) 50%,
+      rgba(236,72,153,0.12) 100%
+    );
   }
   
   .search-magic {
@@ -162,9 +271,21 @@
   .search-magic::before {
     content: '✨';
     position: absolute;
-    right: 12px;
+    right: 16px;
     top: 50%;
     transform: translateY(-50%);
-    animation: bounce-gentle 2s ease-in-out infinite;
+    animation: bounce-gentle 3s ease-in-out infinite;
+    font-size: 1.5rem;
+  }
+
+  .search-magic::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(168,85,247,0.1) 50%, transparent 70%);
+    background-size: 200% 200%;
+    animation: shimmer 4s ease infinite;
+    border-radius: 24px;
+    pointer-events: none;
   }
 }
