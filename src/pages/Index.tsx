@@ -1,6 +1,5 @@
-
 import { useState } from 'react';
-import { Plus, Link as LinkIcon, BookOpen, Search, Tag, Clock } from 'lucide-react';
+import { Plus, Link as LinkIcon, BookOpen, Search, Tag, Clock, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,6 +8,7 @@ import LinkCard from '@/components/LinkCard';
 import JournalCard from '@/components/JournalCard';
 import AddLinkModal from '@/components/AddLinkModal';
 import AddJournalModal from '@/components/AddJournalModal';
+import ChatModal from '@/components/ChatModal';
 
 interface SavedLink {
   id: string;
@@ -31,6 +31,7 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isAddLinkOpen, setIsAddLinkOpen] = useState(false);
   const [isAddJournalOpen, setIsAddJournalOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   
   // Sample data for demonstration
   const [savedLinks, setSavedLinks] = useState<SavedLink[]>([
@@ -116,6 +117,14 @@ const Index = () => {
           >
             <BookOpen className="w-5 h-5 mr-2" />
             Quick Journal
+          </Button>
+          <Button 
+            onClick={() => setIsChatOpen(true)}
+            className="glass-card hover-lift bg-green-600/20 hover:bg-green-600/30 text-green-300 border-green-500/30"
+            size="lg"
+          >
+            <MessageCircle className="w-5 h-5 mr-2" />
+            Reality Check
           </Button>
         </div>
 
@@ -236,6 +245,10 @@ const Index = () => {
         isOpen={isAddJournalOpen} 
         onClose={() => setIsAddJournalOpen(false)}
         onSubmit={handleAddJournal}
+      />
+      <ChatModal 
+        isOpen={isChatOpen} 
+        onClose={() => setIsChatOpen(false)}
       />
     </div>
   );
