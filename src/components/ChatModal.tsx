@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { MessageCircle, Send, Bot, User } from 'lucide-react';
+import { MessageCircle, Send, Bot, User, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -99,11 +99,14 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="glass-card border border-white/20 text-white max-w-2xl h-[600px] flex flex-col">
+      <DialogContent className="glass-card border border-white/20 text-white max-w-2xl h-[600px] flex flex-col rounded-3xl">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold flex items-center gap-2">
-            <MessageCircle className="w-5 h-5 text-green-400" />
-            Reality Check
+          <DialogTitle className="text-2xl font-semibold flex items-center gap-2">
+            <div className="relative">
+              <MessageCircle className="w-6 h-6 text-green-400" />
+              <Sparkles className="w-3 h-3 text-yellow-400 absolute -top-1 -right-1 animate-pulse" />
+            </div>
+            Reality Check 🤖
           </DialogTitle>
         </DialogHeader>
         
@@ -122,22 +125,22 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
                       message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
                     }`}
                   >
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                       message.role === 'user' 
-                        ? 'bg-blue-600/20 text-blue-400' 
-                        : 'bg-green-600/20 text-green-400'
+                        ? 'bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg' 
+                        : 'bg-gradient-to-r from-green-500 to-teal-500 shadow-lg'
                     }`}>
-                      {message.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+                      {message.role === 'user' ? <User className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
                     </div>
                     <div
-                      className={`rounded-lg p-3 ${
+                      className={`rounded-2xl p-4 backdrop-blur-lg ${
                         message.role === 'user'
-                          ? 'bg-blue-600/20 text-blue-100'
-                          : 'bg-white/5 text-gray-200'
+                          ? 'bg-gradient-to-r from-blue-600/30 to-purple-600/30 text-blue-100 border border-blue-400/30'
+                          : 'bg-white/10 text-gray-200 border border-white/20'
                       }`}
                     >
-                      <p className="text-sm">{message.content}</p>
-                      <p className="text-xs text-gray-400 mt-1">
+                      <p className="text-sm leading-relaxed">{message.content}</p>
+                      <p className="text-xs text-gray-400 mt-2 opacity-75">
                         {formatTime(message.timestamp)}
                       </p>
                     </div>
@@ -147,14 +150,14 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
               {isLoading && (
                 <div className="flex gap-3 justify-start">
                   <div className="flex gap-2">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center bg-green-600/20 text-green-400">
-                      <Bot className="w-4 h-4" />
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-r from-green-500 to-teal-500 shadow-lg">
+                      <Bot className="w-5 h-5" />
                     </div>
-                    <div className="bg-white/5 text-gray-200 rounded-lg p-3">
+                    <div className="bg-white/10 text-gray-200 rounded-2xl p-4 border border-white/20">
                       <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        <div className="w-2 h-2 bg-green-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                       </div>
                     </div>
                   </div>
@@ -163,20 +166,20 @@ const ChatModal = ({ isOpen, onClose }: ChatModalProps) => {
             </div>
           </ScrollArea>
           
-          <form onSubmit={handleSendMessage} className="flex gap-2 mt-4">
+          <form onSubmit={handleSendMessage} className="flex gap-3 mt-4">
             <Input
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
-              placeholder="Type your message..."
-              className="glass-card border-white/20 text-white placeholder-gray-400 flex-1"
+              placeholder="What's on your mind? ✨"
+              className="glass-card border-white/20 text-white placeholder-gray-400 flex-1 rounded-2xl h-12"
               disabled={isLoading}
             />
             <Button
               type="submit"
               disabled={!inputMessage.trim() || isLoading}
-              className="bg-green-600 hover:bg-green-700 text-white"
+              className="fun-button h-12 px-6 rounded-2xl"
             >
-              <Send className="w-4 h-4" />
+              <Send className="w-5 h-5" />
             </Button>
           </form>
         </div>

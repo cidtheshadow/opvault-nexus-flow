@@ -25,16 +25,16 @@ const JournalCard = ({ entry }: JournalCardProps) => {
   };
 
   return (
-    <Card className="glass-card hover-lift transition-all duration-300">
+    <Card className="playful-card group">
       <CardHeader className="pb-3">
-        <CardTitle className="text-white text-lg flex items-center gap-2">
-          {entry.mood && <span className="text-xl">{entry.mood}</span>}
+        <CardTitle className="text-white text-lg flex items-center gap-2 group-hover:text-purple-300 transition-colors">
+          {entry.mood && <span className="text-2xl animate-bounce">{entry.mood}</span>}
           {entry.title}
         </CardTitle>
       </CardHeader>
       
       <CardContent className="pt-0">
-        <CardDescription className="text-gray-300 mb-3 line-clamp-3">
+        <CardDescription className="text-gray-300 mb-3 line-clamp-3 leading-relaxed">
           {entry.content}
         </CardDescription>
         
@@ -43,7 +43,7 @@ const JournalCard = ({ entry }: JournalCardProps) => {
             <Calendar className="w-3 h-3" />
             {formatDate(entry.createdAt)}
           </div>
-          <div className="flex items-center gap-1 text-purple-400">
+          <div className="flex items-center gap-1 text-purple-400 font-medium">
             <BookOpen className="w-3 h-3" />
             Journal
           </div>
